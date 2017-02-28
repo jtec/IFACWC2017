@@ -1,0 +1,4 @@
+- take into consideration reviewer's comments
+- fix damping coefficients
+- normalize coefficients servo model
+- longitudinal guidance loop: use nx,z as virtual inputs, transform into pitch angles and thrust command
