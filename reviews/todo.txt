@@ -2,3 +2,7 @@
 - fix damping coefficients
 - normalize coefficients servo model
 - longitudinal guidance loop: use nx,z as virtual inputs, transform into pitch angles and thrust command
+- add side force generator to extend to second order approaches?
+- add figure for guidance frame, sacrifice some other figure?
+- make superscripts indicating frames consistent, there are velocities that are simply called "v"
+- do final check for typos and layout

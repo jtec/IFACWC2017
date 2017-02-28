@@ -23,3 +23,6 @@ platforms (based on Matlab/Simulink or not), highlighting
 pros and cons so that the researchers interested in start
 using the proposed benchmark implementation can have a
 better criteria to make a choice. 
+
+- mentioned flare benchmark as example
+- mentioned the advantages of a complete simulation environment without the risk of implementing all that stuff locally, possibly making lots of errors in the process.

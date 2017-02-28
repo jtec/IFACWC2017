@@ -41,13 +41,13 @@
 \providecommand{\mbf}[1]{\mathbf{#1}}
 
 % Rotation matrices
-\newcommand{\Rbs}{{\ensuremath{\mbf{R_{b \leftarrow  s}}}}}
-\newcommand{\Rbw}{{\ensuremath{\mbf{R_{b \leftarrow  w}}}}}
-\newcommand{\Reb}{{\ensuremath{\mbf{R_{e\leftarrow  b}}}}}
-\newcommand{\Reg}{{\ensuremath{\mbf{R_{e\leftarrow  g}}}}}
-\newcommand{\Rbg}{{\ensuremath{\mbf{R_{b\leftarrow  g}}}}}
-\newcommand{\Rgb}{{\ensuremath{\mbf{R_{g\leftarrow  b}}}}}
-
+\newcommand{\Rbs}{{\ensuremath{\mbf{R_{b   s}}}}}
+\newcommand{\Rbw}{{\ensuremath{\mbf{R_{b   w}}}}}
+\newcommand{\Reb}{{\ensuremath{\mbf{R_{e  b}}}}}
+\newcommand{\Reg}{{\ensuremath{\mbf{R_{e  g}}}}}
+\newcommand{\Rbg}{{\ensuremath{\mbf{R_{b  g}}}}}
+\newcommand{\Rgb}{{\ensuremath{\mbf{R_{g  b}}}}}
+\newcommand{\Rbe}{{\ensuremath{\mbf{R^T_{e  b}}}}}
 % Some useful symbols for the lazy:
 \newcommand{\qbar}{\ensuremath{\bar{q}}}
 
@@ -76,7 +76,7 @@ The capability of autonomous formation flight has the potential to significantly
 In this article we furthermore introduce a nominal guidance frame that does not require state information of other UAS and point out a fundamental issue related to wake vortex tracking during formation maneuvers.
 A set of LQ baseline controllers that are part of the benchmark is presented along with simulation results.
 \end{abstract}
-
+%
 \begin{keyword}
 UAS, Formation flight, benchmark
 \end{keyword}
@@ -91,22 +91,24 @@ In order to bring this capability to small unmanned aircraft, significant advanc
 
 {
 \centering
-$-0.2 b < \Delta y' < -0.1 b$ \\
-$-0.1 b < \Delta z' < 0$ \\
+$-0.2 b < \Delta y < -0.1 b$ \\
+$-0.1 b < \Delta z < 0$ \\
 }
 \noindent
 to benefit from significant energy savings. The longitudinal separation $\Delta x$ is less critical and can be several wingspans \cite{jake2003f}. For small UAS, the spanwidth $b$ is of the order of $1 \, m$, resulting in guidance error requirements of the order of $0.1 \, m$ laterally and vertically.
-
+%
 Testing autonomous formation flight control algorithms using inexpensive UAS also constitutes an interesting way for the commercial aviation industry to build confidence in and evaluate the safety implications new formation flight control systems before implementing them on manned aircraft.\\
 %In this article we present a benchmark for distributed formation flight control of small UAS that will allow to evaluate competing control approaches on a unified test case.
 In control, binary properties of a system such as stability or stability robustness - the system can either shown to be closed-loop stable over a given set of uncertainties or not - can usually be evaluated unambiguously for a given system. In contrast to that, control performance is tied to the problem that is used to evaluate a certain control approach. 
 Benchmark problems play an essential role in every performance-driven field of research, as they allow to quantitatively compare different approaches. \\
-As of today in the field of aircraft formation flight control there is no lack of contributions and promising approaches. However there appears to be a lack of reference problems to compare them and to make an informed judgment about their performance and implementability. This gap is it we are attempting to address with the presented benchmark. Our modeling approach is focused on the current main issues of distributed formation control - mesh stability with minimum shared information and scalable performance - and intentionally does not take into account secondary aspects such as sensor modeling and state estimation.\\
+As of today in the field of aircraft formation flight control there is no lack of contributions and promising approaches. However there appears to be a lack of reference problems to compare them and to make an informed judgment about their performance and implementability. This gap is it we are attempting to address with the presented benchmark. Inspired by existing benchmarks (\cite{biannic2015flare}) tailored to a specific challenging problem, e.g. Our modeling approach is focused on the current main issues of distributed formation control - mesh stability with minimum shared information and control performance that is compatible with the challenging demands of wake energy harvesting - and intentionally does not take into account secondary aspects such as sensor modeling and state estimation.\\
 To be useful, a benchmark must be accessible to other researchers. Therefore, the proposed benchmark is complemented by an implementation as an openly accessible Matlab/Simulink library. A set of LQ baseline controllers comes with the benchmark to provide a basic closed loop solution more advanced approaches can be compared to.
 Furthermore, a cross-platform 3D visualization environment is part of the benchmark. \\
-This work pulls together a number of contributions such as trajectory design techniques to provide a standard test case that addresses important challenges of distributed formation flight control as of today.
-The article is structured as follows: after elaborating on the role of information constraints on formation control in section \ref{sec:infoconstr}, the aircraft model and the simulation environment are presented in section \ref{sec:model}. Sections \ref{sec:trajectory} and \ref{sec:lqr} deal with the benchmark trajectory and baseline control laws, respectively. In section \ref{sec:simresults} first simulation results are presented and section \ref{sec:conclusio} provides some concluding remarks.
+Numerous aircraft models \cite{Beard2012}, vortex simulation \cite{Dogan2008b,Saban2009} and trajectory planning techniques are available in the literature. Combining a specific set of these options into a simulation environment to evaluate a control technique constitutes a considerable, error-prone effort, and closed-loop results are not necessarily comparable due to the specificities of different modeling approaches or other subtleties such as simulation sampling times or assumed actuator model time constants. 
+This work pulls together a number of contributions to provide a standard test case that addresses important challenges of distributed formation flight control as of today without requiring researchers to implement the simulation environment themselves.
 
+The article is structured as follows: after elaborating on the role of information constraints on formation control in section \ref{sec:infoconstr}, the aircraft model and the simulation environment are presented in section \ref{sec:model}. Sections \ref{sec:trajectory} and \ref{sec:lqr} deal with the benchmark trajectory and baseline control laws, respectively. In section \ref{sec:simresults} first simulation results are presented and section \ref{sec:conclusio} provides some concluding remarks.
+%
 \section{Impact of information constraints}
 \label{sec:infoconstr}
 A variety of approaches for formation flight control have been proposed in the past. A focus has been formation scalability, i.e. the capability to add members to a formation without adapting control laws and without violating performance bounds. This is expressed by the requirement of mesh stability. In mesh stable formations, position errors stay locally confined and are not amplified while propagating through the formation.\\
@@ -114,62 +116,28 @@ As a general trend, the control problem becomes more challenging in inverse prop
 Centralized approaches, \cite{nageli2014environment}, pose no particular challenge, since standard control techniques can readily be applied, but require large amounts of inter-vehicle communication to obtain full state information.\\
 Mature linear techniques exist, \cite{shaw2007controller}, for mesh stable control with leader information, i.e. the relative position of each formation member w.r.t the leader aircraft is available for feedback.\\
 The proposed benchmark addresses a more challenging scenario, distributed control with local state information, i.e. each member has only access to its own relative position and velocity w.r.t. to the preceding aircraft. 
-There are fundamental results that linear interconnected systems with at least two integrators such as aircraft formations are always mesh instable if only local feedback information is available (\cite{Pant2001}), ruling out linear control techniques.
+There are fundamental results that linear interconnected systems with at least two integrators such as aircraft formations are always mesh instable under local linear feedback (\cite{Pant2001}), ruling out linear control techniques.
 Very few solutions based on nonlinear techniques such as Port-Hamiltonian systems, \cite{Knorn2014} and Sliding Mode control, \cite{galzi2006uav,Bolting2016}, have been proposed so far to tackle this problem and no experimental results are known to the authors. Furthermore, the existing approaches have been applied to very simplified models, basically point-mass approximations, neglecting a large part of the complex dynamics and constraints of a fixed-wing UAS. 
-
 \section{Aircraft Model}
 \label{sec:model}
-
 \subsection{Aerodynamics}
-There is an abundance of possibilities to model the aerodynamic coefficients of an aircraft, reaching from look-up tables to neural networks. Following the principle of minimum necessary complexity, here a classic, mostly linear in the states model of the aerodynamic coefficients has been adopted, \cite{Beard2012}. 
-The aerodynamic force and moment coefficients are given by 
-
+There is an abundance of possibilities to model the aerodynamic coefficients of an aircraft, reaching from look-up tables to neural networks. Following the principle of minimum necessary complexity, here a classic, mostly linear in the states model of the aerodynamic force and moment coefficients has been adopted, \cite{Beard2012}
+%
 \begin{align}
-C_D &=  
-C_{D_{0}}
-+ (C_{L_0} + C_{L_{\alpha}} \alpha)^2 \frac{1}{\pi e \Lambda} 
-+ C_{D_{\delta_e}} \delta_e
-+ C_{D_{q}} q
+\begin{split}
+C_D =&\,C_{D_0} + \left(C_{L_0} + C_{L_\alpha}\alpha\right)^2\frac{1}{\pi e \Lambda} + C_{D_{\delta_e}} + C_{D_{q}}\frac{\bar{c}}{2V_a}q
 \label{eq:aerocoeffcd} \\
-C_Y &= 
-C_{y_{\beta}} \beta
-+ C_{Y_{p}} p
-+ C_{Y_{r}} r
-+ C_{Y_{\delta_a}} \delta_a
-+ C_{Y_{\delta_r}} \delta_r
-\\
-C_L &=  
-C_{L_{0}} 
-+ C_{L_{\alpha}} \alpha
-+ C_{L_{q}} q
-+ C_{L_{\delta_e}} \delta_e
-\\
-C_l &=  
-C_{l_{\beta}} \beta
-+ C_{l_{p}} p
-+ C_{l_{r}} r
-+ C_{l_{\delta_a}} \delta_a
-+ C_{l_{\delta_r}} \delta_r
-\\
-C_m &=  
-C_{m_{0}}
-+ C_{m_{\alpha}} \alpha
-+ C_{m_{q}} q
-+ C_{m_{\delta_e}} \delta_e
-\\
-C_n &=  
-C_{n_{\beta}} \beta
-+ C_{n_{p}} p
-+ C_{n_{r}} r
-+ C_{n_{\delta_a}} \delta_a
-+ C_{n_{\delta_r}} \delta_r
-\label{eq:aerocoeffcn}
+C_Y =&\,C_{Y_\beta}\beta + C_{Y_p}\frac{b}{2V_a}p + C_{Y_r}\frac{b}{2V_a}r + C_{Y_{\delta_a}}\delta_a + C_{Y_{\delta_r}}\delta_r\\
+C_L =&\,C_{L_0} + C_{L_\alpha}\alpha +C_{L_q}\frac{\bar{c}}{2V_a}q +C_{L_{\delta_e}}\delta_e\\
+C_l =&\,C_{l_0}+C_{l_{\beta}}\beta + C_{l_{p}}\frac{b}{2V_a}p +C_{l_{r}}\frac{b}{2V_a}r +C_{l_{\delta_a}}\delta_a +C_{l_{\delta_r}}\delta_r\\
+C_m =&\,C_{m_0} + C_{m_\alpha}\alpha + C_{m_q}\frac{\bar{c}}{2V_a}q + C_{m_{\delta_e}}\delta_e\\
+C_n =&\,C_{n_0}+C_{n_\beta}\beta + C_{n_p}\frac{b}{2V_a}p + C_{n_r}\frac{b}{2V_a}r+ C_{n_{\delta_a}}\delta_a+ C_{n_{\delta_r}}\delta_r
+\end{split}
 \end{align}
-Estimates of the coefficients have been obtained with the software AVL from a 3D model of a small electric glider airplane (Multiplex Cularis), see \cite{StollePhD2016}.\\
-
+%
+with the Oswald factor $e$ and the wing aspect ratio $\Lambda$. Estimates of the coefficients have been obtained with the software AVL from a 3D model of a small electric glider airplane (Multiplex Cularis), see \cite{StollePhD2016}.
 \subsection{Kinematics}
-Using \ref{eq:aerocoeffcd}-\ref{eq:aerocoeffcn}, the aerodynamic forces and moments in the body frame are computed as
-
+Using \ref{eq:aerocoeffcd}, the aerodynamic forces and moments in the body frame are computed as
 \begin{align}
 \label{eq:coeff2realforcesandmoments}
 %\begin{pmatrix}
@@ -177,7 +145,7 @@ Using \ref{eq:aerocoeffcd}-\ref{eq:aerocoeffcn}, the aerodynamic forces and mome
 %Y \\
 %Z 
 %\end{pmatrix}
-\mathbf{F}
+\mathbf{F}_a
 &=
 \Rbs
 \bar{q}
@@ -199,7 +167,7 @@ T \\
 %M \\
 %N 
 %\end{pmatrix}
-\mathbf{M}
+\mathbf{M}_a
 &=
 \Rbs
 \begin{bmatrix}
@@ -213,26 +181,29 @@ C_m \\
 C_n 
 \end{pmatrix}
 \end{align}
-with $\Rbs$ the rotation matrix between stability frame and body frame, the vector of forces $\mathbf{F}$ and the vector of moments $\mathbf{M}$, assuming that the thrust vector is aligned with the body frame x axis and coincides with the center of gravity.
+with $\Rbs$ the rotation matrix between stability frame and body frame, the vector of forces $\mathbf{F}_a$ and the vector of moments $\mathbf{M}_a$, assuming that the thrust vector is aligned with the body frame x axis and coincides with the center of gravity.
 Translational accelerations in the body frame result to
 \begin{align}
 \label{eq:forces2accelerations}
-\dot{\mathbf{v}} &= \frac{1}{m}\mathbf{F} 
-- (\mathbf{\omega} \times \mathbf{v})
+\dot{\mathbf{v}} &= \frac{1}{m}\mathbf{F_a} 
+- (\mathbf{\omega} \times \mathbf{v}) 
++
+\Rbe
+\mathbf{g}^e
 \end{align}
 where $\mathbf{v}$ is the translational velocity of the body frame w.r.t the inertial frame expressed in body frame axes, 
-and $\mathbf{\omega}^{b}$ is the angular velocity of the body frame w.r.t the inertial frame expressed in body frame axes. The rotation rate of the earth can be neglected in this particular case due to the short duration of the considered UAS flight maneuvers.\\
-Angular accelerations about body frame axes follow to
+$\mathbf{\omega}^{b}$ is the angular velocity of the body frame w.r.t the inertial frame expressed in body frame axes and $\mathbf{g}^e$ is the gravity vector. The rotation rate of the earth can be neglected in this particular case due to the short duration of the considered UAS flight maneuvers.\\
+Angular accelerations about body frame axes follow as
 \begin{align}
 \dot{\mathbf{\omega}} &= -\mathbf{J}^{-1} ({\mathbf{\omega}} 
 \times 
 (\mathbf{J} \,{\mathbf{\omega}}))
 + \mathbf{J}^{-1} 
-\mathbf{M}
+\mathbf{M_a}
 \end{align}
 with the inertia tensor $\mathbf{J}$.
 With these accelerations, standard techniques are used to propagate angular and translational velocities and positions over time to compute the aircraft's full state, which is given by
-
+%
 \begin{align}
 \mathbf{x} &= 
 \begin{pmatrix}
@@ -244,9 +215,9 @@ With these accelerations, standard techniques are used to propagate angular and 
 \end{align}
 with NED position $\mathbf{p}$, NED velocity $\mathbf{v}$, the attitude quaternion $\mathbf{q}$ and the rotation rate vector $\mathbf{\omega}$.
 \subsubsection{Exogenous perturbations}
-
+%
 The aircraft dynamics are subject to exogenous disturbances due to atmospheric free air turbulence. These are taken into account as additional system inputs, extending the input vector to
-
+%
 \begin{align}
 \mathbf{u} &= 
 \begin{pmatrix}
@@ -258,10 +229,8 @@ The aircraft dynamics are subject to exogenous disturbances due to atmospheric f
 \mathbf{\omega}_w^T
 \end{pmatrix}^T
 \end{align}
-
 \subsection{Actuators and Engine}
 The control surface servo actuators have been identified in previous work, \cite{ameho2013pilotage}, as second order systems 
-
 \begin{align}
 \begin{pmatrix}
 \dot{\delta}_i \\
@@ -284,13 +253,13 @@ The control surface servo actuators have been identified in previous work, \cite
 \delta_{i, c}
 \end{align}
 This model is augmented by adding realistic saturations on deflection and deflection rate
-
+%
 \begin{align}
 |\delta_i| &\leq \frac{\pi}{4} \\
 |\dot{\delta}_i| &\leq 5.8 \frac{rad}{s}
 \end{align}
 The engine is modeled as first order system
-
+%
 \begin{align}
 \dot{\delta}_{en}
 =
@@ -300,9 +269,9 @@ The engine is modeled as first order system
 - \delta_{en}
 )
 \end{align}
-
+%
 The thrust $T$ is then computed using a simple model based on momentum theory (\cite{Beard2012}) as
-
+%
 \begin{align}
 T = \frac{\rho}{2}
 S_{en}
@@ -313,10 +282,10 @@ C_{en}
 )
 \end{align}
 with the propeller disc surface $S_{en}$, the thrust constant $C_{en}$, the engine constant $k_{en}$ and the airspeed $V_a$.
-
+%
 %\subsection{Vortex Model}
 %A variety of approaches has been proposed to simulate the effects of trailing vortices on the following UAS, mostly based on modified Horseshoe Vortex models (HVM) \cite{Hummel1982} or Vortex Lattice methods (VLM) \cite{Saban2009}. For the purpose of this work, a model based on a HVM with modified core model \cite{dogan2005modeling} is used. It is reported to provide predictions that are in good agreement with both VLM models and wind tunnel measurements. By using an averaging scheme, induced velocities and angular rates are generated in function of the inter-UAS separation vectors.
-
+%
 \subsection{Wind}
 The wind is assumed to be composed of a constant ambient part and a time-varying stochastic part, inducing velocities
 \begin{align}
@@ -325,24 +294,22 @@ The wind is assumed to be composed of a constant ambient part and a time-varying
 and induced angular rates
 $\mathbf{\omega}_w(t)$. 
 Wind time series are generated according to the Dryden turbulence spectrum. 
-
 \section{Benchmark Trajectory}
 \label{sec:trajectory}
 The benchmark includes a 3D trajectory composed of $\mathrm{C}_2$-continuous cubic Bézier splines, based on the work presented by \cite{Yang2008}. The trajectory features a linear part to evaluate cruise flight performance, followed by an approximately helical part to evaluate climb and turn maneuvers. See \cite{looye2011helical} for the compelling properties of helical trajectories for the evaluation of automatic flight control laws.
-
+%
 \begin{figure}
 \centering
-\includegraphics[width=\columnwidth]{trajectory.pdf}
+\includegraphics[width=.8\columnwidth]{trajectory.pdf}
 \caption{Top view of benchmark trajectory}
 \end{figure}
-
+%
 \begin{figure}
 \centering
-\includegraphics[width=\columnwidth]{UAV3D_helix-lowres}
+\includegraphics[width=.8\columnwidth]{UAV3D_helix-lowres}
 \caption{Isoview of benchmark trajectory in UAV3D}
 \end{figure}
-
-
+%
 \section{LQ baseline control laws}
 \label{sec:lqr}
 To provide a standard to compare new control approaches, a set of baseline LQ control laws is provided as part of the benchmark. For controller synthesis, the respective subsystems are extracted from the full linear model that results from linearizing the nonlinear aircraft model at cruise flight trim conditions. The structure of the control laws is based on the usual assumptions of weak coupling between lateral and longitudinal dynamics and timescale separation of attitude dynamics and translational dynamics.\\
@@ -435,7 +402,6 @@ To cope with steady state tracking errors, integral action is added by augmentin
 \label{eq:integerrorss}
 \end{align}
 where $G$ is a sparse matrix defining the states that are selected for integral action. As is common practice, wind disturbances and actuator and engine dynamics are neglected for the LQR design systems. A linear model including models of actuators and engine is used for fast evaluation of candidate controllers during controller tuning.
-
 \subsection{Coordinate frames}
 The system to be controlled is a formation of $n$ UAS flying in an arbitrary pattern. In the literature, a variety of guidance frames has been proposed, ranging from the predecessor's body frame to a common guidance frame attached to the formation's barycenter.\\
 The primary objective of tight formation flight is to keep each UAS at the position of maximum efficiency in the wake of its predecessor.
@@ -443,17 +409,17 @@ Being induced by the aerodynamic flow, the wake vortices are approximately align
 For maximum energy savings, the follower thus needs to keep its relative position constant in this frame. Since small UAS typically are not equipped with sensors for angle of attack and side slip angle, a local guidance frame (index $g$) is introduced as an approximation. Its x axis unit vector $\mbf{x}_g$ is aligned with each predecessor's NED velocity vector. Its y axis should be aligned with the y axis of the predecessor's body frame, since the central axis of the vortices lies somewhere on the predecessor's wing.
 To avoid having to communicate the NED speed and attitude of each UAS to its follower, the nominal speed and acceleration vector of each UAS on the current formation trajectory is used to derive a nominal guidance frame.
 These two vectors are computed sequentially for each UAS, since the attitude of each nominal local guidance frame defines the nominal NED position of the next one.
-For two subsequent UAS, predecessor $p$ and follower $f$, the nominal NED speed of $p$ is computed as
+For two subsequent UAS, predecessor $p$ and follower $f$, the nominal NED speed of $f$ is computed as
 \begin{align}
 \mbf{v}_f^e &= \mbf{v}_p^e + \mbf{\omega}_p^e \times \Delta \mbf{p}_f^e 
 \end{align}
-with the commanded separation vector $\Delta \mbf{p}_f^e$. Acceleration is given by
+with the commanded separation vector $\Delta \mbf{p}_f^e$ and the rotation rate vector $\mbf{\omega}_p^e$ corresponding to the leader's trajectory curvature. Nominal acceleration of $f$ is given by
 \begin{align}
-\dot{\mbf{v}}_f^e &= \dot{\mbf{v}}_p^e + \mbf{\omega}_p^e \times (\mbf{\omega}_p^e \times \Delta \mbf{p}^e)
+\dot{\mbf{v}}_f^e &= \dot{\mbf{v}}_p^e + \mbf{\omega}_p^e \times (\mbf{\omega}_p^e \times \Delta \mbf{p}^e_f)
 \end{align}
-and the instantaneous rotation rate $\mbf{\omega}_f^e$ of the guidance frame due to trajectory curvature by
+and the instantaneous rotation rate $\mbf{\omega}_p^e$ of the guidance frame due to trajectory curvature by
 \begin{align}
-|\mbf{\omega}_f^e| &= \left(\frac{|\dot{\mbf{v}_f^e}|}{|\Delta \mbf{p}^e|}\right)^\frac{1}{2}\\
+|\mbf{\omega}_p^e| &= \left(\frac{|\dot{\mbf{v}_f^e}|}{|\Delta \mbf{p}^e|}\right)^\frac{1}{2}\\
 \mbf{\omega}_f^e &= |\mbf{\omega}_f^e| 
 \frac{\dot{\mbf{v}_f^e} \times \mbf{v}_f^e}{|\dot{\mbf{v}_f^e} \times \mbf{v}_f^e|}
 \end{align}
@@ -484,20 +450,14 @@ leading to the corresponding rotation matrix
 \mbf{u}_z
 \end{bmatrix}
 \end{align}
-
-The guidance frame and its computation should be illustrated by an appropriate figure, this is deferred to the final version due to time constraints.
-
+%
 %Baaam: tracking the vortex during maneuvers makes trajectory disturbances formation-size dependent, independently of the used controllers.
-
 %The system to be controlled is a formation of $n$ UAS flying in an arbitrary pattern. The right choice of reference frames can significantly facilitate control design. To give one example, when performing navigation in the predecessor's body frame, variations in the predecessor's attitude will couple into follower's position control loops, increasing control action. What is more, the effect increases with inter-vehicle separation, leading to high control demands during rendezvous. To avoid such disadvantages, the motion of the reference frame with respect to the inertial frame should be within the control bandwidth of the position controller. A suitable frame is a local Cartesian frame whose x axis is aligned with the follower's inertial speed projected on the horizontal plane, and whose z axis is aligned with the NED frame's z axis, the \textbf{Follower Speed Frame} (FS). Its origin coincides with the follower's body frame. The follower's wind frame would be preferable, but requires on-line wind estimation or flow sensors that usually are not available for small UAS.
-
 %To dispose of a common reference frame for multiple members of the formation, the \textbf{Leader Speed Frame} (LS) is defined. Its x axis is aligned with the formation leader's NED speed projected on the horizontal plane, its z axis is aligned with the NED frame's z axis, and its y axis completes a right-handed Cartesian coordinate system.
-
 \subsection{Predecessor tracking}
-
 \subsubsection{Longitudinal}
 The control inputs of the longitudinal position control loop are the commanded pitch angle $\Theta_c$ and the engine command $\delta_{en,c}$. In the absence of external disturbances it regulates the relative position and velocity errors asymptotically to zero. Using $\Theta_c$ as control input instead of the angle of attack $\alpha$, which is more directly related to aerodynamic lift, is imposed by the usual absence of AoA sensors on board of small UAS. To obtain a good approximation of $\alpha$, the pitch angle w.r.t to the local guidance frame is used. The design system is given by
-
+%
 \begin{align}
 \begin{pmatrix}
 \Delta \dot{p}_x \\
@@ -545,9 +505,9 @@ The lateral control strategy is derived from the simplified system
 {} &&Z   &\approx m g \\
 \Rightarrow &&n_y &\approx \sin^{-1}(\Phi) \label{eq:ny2phi}
 \end{alignat}
-
+%
 thus lateral load factors in the local guidance frame are generated by inclining the lift vector via the local bank angle $\Phi$. The resulting LQR design system is given by
-
+%
 \begin{align}
 \begin{pmatrix}
 \Delta \dot{p}_y \\
@@ -582,7 +542,6 @@ n_{y,c}
 \end{pmatrix}
 \end{align}
 and the commanded bank angle in the local guidance frame is computed using  (\ref{eq:ny2phi}).
-
 \subsection{Attitude tracking}
 The inner loops consist of separate pitch angle and bank angle tracking laws. Both angles are not the usual Euler angles w.r.t. to the NED frame but are defined as the rotation angles needed to rotate the body frame into the local guidance frame. That being said, the resulting commanded attitude rotation matrix w.r.t. to the NED frame is composed as
 \begin{align}
@@ -601,7 +560,7 @@ where
 \end{bmatrix}
 \end{align}
 Note that the local heading angle is not actively controlled and as such is set to zero.
-
+%
 \subsubsection{Longitudinal}
 The pitch attitude design system is given by
 \begin{align}
@@ -678,28 +637,26 @@ B
 \section{Simulation results}
 \label{sec:simresults}
 Flight on the benchmark trajectory has been simulated for a formation of three UAS both in calm air and under turbulent wind with $\mbf{v}_{w,a} = (-3 \; -3 \; 0)^T \, \frac{m}{s}$ i.e. about $28 \, \%$ of the nominal airspeed of $15 \, \frac{m}{s}$. The separation vectors have been selected as $\Delta \mbf{p}_i (-b \: b \: 0)^T$ for $i=1...3$.
-
 \subsection{Visualization}
 A lightweight visualization environment based on the Java jmonkey game engine (see \cite{jmonkeyengine}) has been developed to display the attitude and positions of multiple UAS in a synthetic 3D environment. 
 It has proven to enhance productivity while developing and debugging guidance laws. 
 It is interfaced with the Simulink dynamics simulation via a UDP (User Datagram Protocol) network link. Since the visuals have to be updated only at a moderate rate of about 30 Hz for human perception, sending UDP packets adds a small overhead to the overall simulation time. The tool can be easily extended and currently provides several generic UAS 3D models as well as the possibility to display wake vortices.
 \begin{figure}
 \centering
-\includegraphics[width=\columnwidth]{UAV3D_N=3-lowres}
+\includegraphics[width=.8\columnwidth]{UAV3D_N=3-lowres}
 \caption{N=3 formation in UAV3D}
 \end{figure}
-
 \subsection{Calm atmosphere}
 \label{sec:simresults_calm}
 Position errors in the local guidance frames along with the longitudinal control inputs under calm air conditions are shown in fig. \ref{fig:combinedcalmair}. Simulating the benchmark formation in calm air clearly reveals two deficiencies of the baseline controllers. The first is their expected mesh instability. The second one is related to the selection of guidance frames, see section \ref{sec:lqr}. Since the local guidance frames have been selected to track the predecessor's wake vortices, changes of trajectory curvature create perturbations w.r.t. the NED frame that are dependent on the separation vectors and vehicle index. This leads - with linear controllers - to position errors that grow with the vehicle index.  Tracking the vortex during maneuvers is therefore not a scalable guidance strategy. This constitutes an open problem.
-
+%
 \begin{figure}
 \centering
 \includegraphics[width=.9\columnwidth]{combined-calmair-lowres.pdf}
 \caption{Position errors in \textit{g} frame and longitudinal control inputs for calm atmosphere}
 \label{fig:combinedcalmair}
 \end{figure}
-
+%
 \subsection{Turbulent atmosphere}
 Position errors in the local guidance frames along with the longitudinal control inputs under wind and turbulence are shown in fig. \ref{fig:combinedcalmair}. Position errors are considerably larger during the initial cruise flight phase. On the helical part of the trajectory, perturbations due to reference frame perturbations dominate. The helical trajectory clearly reveals another shortcoming of the baseline control strategy. As the formation descends and the changing trajectory heading leads to tailwind, the engine inputs saturate as the longitudinal position controller attempts to maintain constant ground speed. It seems therefore advisable to add some kind of wind estimation scheme into the guidance strategy to maintain constant airspeed.
 \begin{figure}
@@ -708,11 +665,11 @@ Position errors in the local guidance frames along with the longitudinal control
 \caption{Position errors in \textit{g} frame and longitudinal control inputs for turbulent atmosphere}
 \end{figure}
 \FloatBarrier
-
+%
 \section{Conclusion}
 \label{sec:conclusio}
 A new benchmark for distributed formation flight control for small UAS has been presented, along with simulation results for a set of baseline controllers. The results confirm their expected mesh instability as well as the ability of the chosen reference trajectory to reveal this and various other deficiencies of the baseline guidance strategy. These deficiencies provide a starting point for future improvements. It is demonstrated that tracking the predecessor's wake vortex during maneuvers is not a scalable guidance strategy. \\
 We invite other researchers working in this domain to adopt this benchmark to evaluate new promising control and guidance approaches and to contribute to it e.g. by proposing and implementing new benchmark trajectories or by adding to the documentation. The benchmark and the tools it is built on are version controlled for guaranteed comparability and openly available, \cite{UAV3D,uavsimblockset,ffb,STRAGE}. The implementation depends on a number of Matlab/Simulink toolboxes and blocksets. To reduce this threshold, we are currently evaluating the possibility of a hosted benchmark that is accessible via the Internet.
-
-\bibliography{../../bibliography/bibliographyPhD}      
+%
+\bibliography{bibliography/bibliographyPhD}      
 \end{document}
