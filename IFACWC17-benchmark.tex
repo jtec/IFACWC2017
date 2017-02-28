@@ -239,7 +239,7 @@ The control surface servo actuators have been identified in previous work, \cite
 =
 \begin{bmatrix}
 0 & 1 \\
--3948 & 100.5 
+-\omega_n^2 & -2 \zeta \omega_n 
 \end{bmatrix}
 \begin{pmatrix}
 \delta_i \\
@@ -248,15 +248,16 @@ The control surface servo actuators have been identified in previous work, \cite
 +
 \begin{bmatrix}
 0\\
-3948 
+\omega_n
 \end{bmatrix}
 \delta_{i, c}
 \end{align}
+where $\omega_n=62.8 \, s^{-1}$ and $\zeta=0.8$.
 This model is augmented by adding realistic saturations on deflection and deflection rate
 %
 \begin{align}
-|\delta_i| &\leq \frac{\pi}{4} \\
-|\dot{\delta}_i| &\leq 5.8 \frac{rad}{s}
+|\delta_i| &\in [-\frac{\pi}{4}, \frac{\pi}{4}]\, rad\\
+|\dot{\delta}_i| &\in [-5.8, 5.8] \frac{rad}{s}
 \end{align}
 The engine is modeled as first order system
 %
@@ -270,7 +271,7 @@ The engine is modeled as first order system
 )
 \end{align}
 %
-The thrust $T$ is then computed using a simple model based on momentum theory (\cite{Beard2012}) as
+where $\tau_{en} = 0.27^{-1}s^{-1}$. The thrust $T$ is then computed using a simple model based on momentum theory (\cite{Beard2012}) as
 %
 \begin{align}
 T = \frac{\rho}{2}
@@ -406,7 +407,7 @@ where $G$ is a sparse matrix defining the states that are selected for integral 
 The system to be controlled is a formation of $n$ UAS flying in an arbitrary pattern. In the literature, a variety of guidance frames has been proposed, ranging from the predecessor's body frame to a common guidance frame attached to the formation's barycenter.\\
 The primary objective of tight formation flight is to keep each UAS at the position of maximum efficiency in the wake of its predecessor.
 Being induced by the aerodynamic flow, the wake vortices are approximately aligned with the predecessor's wind frame, neglecting trajectory curvature. 
-For maximum energy savings, the follower thus needs to keep its relative position constant in this frame. Since small UAS typically are not equipped with sensors for angle of attack and side slip angle, a local guidance frame (index $g$) is introduced as an approximation. Its x axis unit vector $\mbf{x}_g$ is aligned with each predecessor's NED velocity vector. Its y axis should be aligned with the y axis of the predecessor's body frame, since the central axis of the vortices lies somewhere on the predecessor's wing.
+For maximum energy savings, the follower thus needs to keep its relative position constant in this frame. Since small UAS typically are not equipped with sensors for angle of attack and side slip angle, a local guidance frame (index $g$) is introduced as an approximation. Its x axis unit vector $\mbf{u}_{x,g}$ is aligned with each predecessor's NED velocity vector. Its y axis should be aligned with the y axis of the predecessor's body frame, since the central axis of the vortices lies somewhere on the predecessor's wing.
 To avoid having to communicate the NED speed and attitude of each UAS to its follower, the nominal speed and acceleration vector of each UAS on the current formation trajectory is used to derive a nominal guidance frame.
 These two vectors are computed sequentially for each UAS, since the attitude of each nominal local guidance frame defines the nominal NED position of the next one.
 For two subsequent UAS, predecessor $p$ and follower $f$, the nominal NED speed of $f$ is computed as
@@ -419,35 +420,36 @@ with the commanded separation vector $\Delta \mbf{p}_f^e$ and the rotation rate 
 \end{align}
 and the instantaneous rotation rate $\mbf{\omega}_p^e$ of the guidance frame due to trajectory curvature by
 \begin{align}
-|\mbf{\omega}_p^e| &= \left(\frac{|\dot{\mbf{v}_f^e}|}{|\Delta \mbf{p}^e|}\right)^\frac{1}{2}\\
-\mbf{\omega}_f^e &= |\mbf{\omega}_f^e| 
-\frac{\dot{\mbf{v}_f^e} \times \mbf{v}_f^e}{|\dot{\mbf{v}_f^e} \times \mbf{v}_f^e|}
+|\mbf{\omega}_p^e| &= {|{\mbf{v}_g^e}|}^{-1}{|\dot{\mbf{v}_g^e}|}\\
+\mbf{\omega}_p^e &= 
+|\mbf{\omega}_p^e| 
+({\dot{\mbf{v}_p^e} \times \mbf{v}_p^e})({|\dot{\mbf{v}_p^e} \times \mbf{v}_p^e|})^{-1}
 \end{align}
 The x axis unit vector of the local guidance frame results then to
 \begin{align}
-\mbf{u}_x = |\mbf{v}_f^e|^{-1}\mbf{v}_f^e
+\mbf{u}_{x,g} = |\mbf{v}_p^e|^{-1}\mbf{v}_p^e
 \end{align}
-The orientation of the z axis unit vector $\mbf{u}_z$ is derived from the simplifying assumption that gravitational acceleration and centrifugal forces due to trajectory curvature are compensated for by the thrust and drag along $\mbf{x}_g$ and by the aerodynamic lift in a plane normal to $\mbf{x}_g$. Further assuming that the aerodynamic lift $Z$ lies in the x-z plane of the body frames, first the total centrifugal and gravitational acceleration acting on the aircraft is computed as
+The orientation of the z axis unit vector $\mbf{u}_{z,g}$ is derived from the simplifying assumption that gravitational acceleration and centrifugal forces due to trajectory curvature are compensated for by the thrust and drag along $\mbf{u}_{x,g}$ and by the aerodynamic lift in a plane normal to $\mbf{u}_{x,g}$. Further assuming that the aerodynamic lift $Z$ lies in the x-z plane of the body frames, first the total centrifugal and gravitational acceleration acting on $p$ is computed as
 \begin{align}
-\mbf{a}_{t} = |\mbf{\omega}_{p}|^2 \mbf{r} + (0 \: 0 \: g)^T
+\mbf{a}_{t} = |\mbf{\omega}^e_{p}|^2 \mbf{r} + \mbf{g}^e
 \end{align}
 The z unit vector $\mbf{u}_z$ is then computed by projecting and normalizing the total acceleration on the z-y plane of the g frame
 \begin{align}
-\mbf{a}_{t,zy} = \mbf{a}_t - \frac{\mbf{a}_t \cdot \mbf{u}_x}{\mbf{u}_x \cdot \mbf{u}_x} \cdot \mbf{u}_x \\
-\mbf{u}_z = |\mbf{a}_{t,zy}|^{-1}\mbf{a}_{t,zy}
+\mbf{a}_{t,zy} = \mbf{a}_t - \frac{\mbf{a}_t \cdot \mbf{u}_{x,g}}{\mbf{u}_{x,g} \cdot \mbf{u}_{x,g}} \cdot \mbf{u}_{x,g} \\
+\mbf{u}_{z,g} = |\mbf{a}_{t,zy}|^{-1}\mbf{a}_{t,zy}
 \end{align}
-and $\mbf{u}_y$ completes a right-handed Cartesian coordinate frame
+and $\mbf{u}_{y,g}$ completes a right-handed Cartesian coordinate frame
 \begin{align}
-\mbf{u}_y = \mbf{u}_z \times \mbf{u}_x
+\mbf{u}_{y,g} = \mbf{u}_{z,g} \times \mbf{u}_{x,g}
 \end{align}
 leading to the corresponding rotation matrix
 \begin{align}
 \Reg 
 =
 \begin{bmatrix}
-\mbf{u}_x & 
-\mbf{u}_y &
-\mbf{u}_z
+\mbf{u}_{x,g} & 
+\mbf{u}_{y,g} &
+\mbf{u}_{z,g}
 \end{bmatrix}
 \end{align}
 %
