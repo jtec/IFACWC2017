@@ -1,0 +1,25 @@
+Reviewer 2 of IFAC WC 2017 submission 3367
+
+Comments to the author
+======================
+
+The paper presents an open benchmark comprising a nonlinear
+six degrees of freedom dynamics model of an electric glider
+UAS and a nominal guidance frame that does not require
+state information of other UAS. The paper describes in
+detail the aircraft model and the simulation environment
+and control laws. Simulation results are based on formation
+of three UAS for the cases of calm air and with the
+presence of turbulent air. Position errors and control
+inputs are depicted for each case. Conclusion section
+remarks that the simulation results for this particular UAS
+formation confirm the expected mesh instability and other
+deficiencies of the baseline guidance strategy. 
+
+In order to improve the paper, I would recommend the
+authors to briefly compare the proposed benchmark
+implementation to other possible related benchmarking
+platforms (based on Matlab/Simulink or not), highlighting
+pros and cons so that the researchers interested in start
+using the proposed benchmark implementation can have a
+better criteria to make a choice. 

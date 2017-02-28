@@ -1,0 +1,35 @@
+Reviewer 10 of IFAC WC 2017 submission 3367
+
+Comments to the author
+======================
+
+This is a good paper and I recommend for its acceptance. I
+also suggest that the authors prepare a more elaborate
+paper and submit it to Control Engineering Practice for
+consideration. Such a paper would greatly benefit the
+flight control community in general.
+
+Having said that, the following minor corrections should be
+done before submitting the final version.
+
+1. Numbers in Eq.(13) should be replaced with symbols (I
+guess \gita and \omega_n can be used) and numbers (with
+units) can be given for those symbols.
+
+2. Reference is needed for Dryden turbulence spectrum below
+Eq.(18).
+
+3. References should be included for the claim in Paragraph
+below Subsection 5.1
+
+4. Perhaps the following paper should be cited, which has
+proposed close formation flying using the concept of
+integrated guidance and control that uses the Six-DOF model
+of a fixed-wing UAV:
+Formation Flying with Nonlinear Partial Integrated Guidance
+and Control, IEEE Transactions on Aerospace and Electronic
+Systems, Vol. 50, No. 4, October 2014, pp. 2847-2859.
+
+5. Last sentence of the paper, i.e. ".....we are currently
+evaluating...." should be seriously looked into and rather
+be committed for the benefit of the control community.

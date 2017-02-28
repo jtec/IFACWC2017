@@ -1,0 +1,21 @@
+Reviewer 11 of IFAC WC 2017 submission 3367
+
+Comments to the author
+======================
+
+This paper presents a benchmark for distributed formation
+flight control for UAVs. A set of LQ baseline control laws
+is also implemented to provide a standard test case. 
+Although the reviewer understand the importance of a
+benchmark, it seems to me that the discussion on the
+benchmark is insufficient. The reviewer has the following
+concerns:
+* Some tools including 3D visualization are also presented.
+However, it seems important for other researchers to
+implement and test their own algorithms easily. The
+interface of the tool must also be discussed. 
+* Model of aircraft and trajectory are shown in Section 3
+and 4. But the reviewer wonders if it is possible to form
+consensus as a widely-used benchmark. It seems better to
+devote much space to the effectiveness of them to be used
+for the benchmark. 

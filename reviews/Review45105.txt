@@ -1,0 +1,11 @@
+Reviewer 9 of IFAC WC 2017 submission 3367
+
+Comments to the author
+======================
+
+It is an interesting open problem which has been made as
+the benchmark problem in distributed flight control area.
+The following need to be clarified.
+1. what does the separation vector, delta p^e_f in equation
+(26)?
+2. what is omega_p in equation (31)?
