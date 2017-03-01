@@ -15,12 +15,15 @@ done before submitting the final version.
 1. Numbers in Eq.(13) should be replaced with symbols (I
 guess \gita and \omega_n can be used) and numbers (with
 units) can be given for those symbols.
+- nice one, done.
 
 2. Reference is needed for Dryden turbulence spectrum below
 Eq.(18).
+- added ref to MIL-STD-1797A and Matlab/Simulink Aerospace Blockset
 
 3. References should be included for the claim in Paragraph
 below Subsection 5.1
+- added refs to two examples for guidance frames proposed in the literature.
 
 4. Perhaps the following paper should be cited, which has
 proposed close formation flying using the concept of
@@ -29,7 +32,9 @@ of a fixed-wing UAV:
 Formation Flying with Nonlinear Partial Integrated Guidance
 and Control, IEEE Transactions on Aerospace and Electronic
 Systems, Vol. 50, No. 4, October 2014, pp. 2847-2859.
+ - done, mentioned in conclusion as potential user of the benchmark
 
 5. Last sentence of the paper, i.e. ".....we are currently
 evaluating...." should be seriously looked into and rather
 be committed for the benefit of the control community.
+- ok, working on it

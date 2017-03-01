@@ -15,7 +15,7 @@ However, it seems important for other researchers to
 implement and test their own algorithms easily. The
 interface of the tool must also be discussed. 
 - It is true that the interface to the UAV3D tool would benefit from online documentation, 
-	but it is also true that it is encapsulated in a Simulink block and as such
+	but it is also true that the interface is encapsulated in a Simulink block and as such
 	can be used in a drop-and-play manner - at least from Simulink. Extending the 
 	use of UAV3D to other simulation envionments is clearly not within the scope
 	of this article.
