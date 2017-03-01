@@ -1,5 +1,6 @@
 - Register for conference to enable upload
 - Transfer copyright
+- Print and read for typos etc.
 - Upload first final version
 
 The rest is optional:
