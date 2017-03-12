@@ -134,7 +134,7 @@ C_n =&\,C_{n_\beta}\beta + \frac{b}{2V_a} \left(C_{n_p}p + C_{n_r}r\right)+ C_{n
 \end{split}
 \end{align}
 %
-with the Oswald factor $e$ and the wing aspect ratio $\Lambda$. Estimates of the coefficients have been obtained with the software AVL from a 3D model of a small electric glider airplane (Multiplex Cularis), see \cite{StollePhD2016}.
+with the Oswald factor $e$ and the wing aspect ratio $\Lambda$. Estimates of the coefficients have been obtained with the software AVL from a 3D model of a small electric glider airplane, see \cite{StollePhD2016}.
 \subsection{Kinematics}
 Using \ref{eq:aerocoeffcd}, the aerodynamic forces and moments in the body frame are computed as
 \begin{align}
@@ -184,7 +184,7 @@ with $\Rbs$ the rotation matrix between stability frame and body frame, the vect
 Translational accelerations in the body frame result to
 \begin{align}
 \label{eq:forces2accelerations}
-\dot{\mathbf{v}} &= \frac{1}{m}\mathbf{F_a} 
+\dot{\mathbf{v}}^b &= \frac{1}{m}\mathbf{F_a} 
 - (\mathbf{\omega}^b \times \mathbf{v}^b) 
 +
 \Rbe
@@ -201,18 +201,17 @@ Angular accelerations about body frame axes follow as
 \mathbf{M_a}
 \end{align}
 with the inertia tensor $\mathbf{J}$.
-With these accelerations, standard techniques are used to propagate angular and translational velocities and positions over time to compute the aircraft's full state, which is given by
-%
+With these accelerations, standard integration techniques and transformations can be used to propagate angular and translational velocities and positions over time to compute the aircraft's full state, which is given by
 \begin{align}
 \mathbf{x} &= 
 \begin{pmatrix}
-\mathbf{p}^T \:
-\mathbf{v}^T \:
-\mathbf{q}^T \:
-\mathbf{\omega}^T \:
+\mathbf{p}^{e^T} \:
+\mathbf{v}^{e^T} \:
+\mathbf{q}^{T}_{eb} \:
+\mathbf{\omega}^{b^T} \:
 \end{pmatrix}^T 
 \end{align}
-with NED position $\mathbf{p}$, NED velocity $\mathbf{v}$, the attitude quaternion $\mathbf{q}$ and the rotation rate vector $\mathbf{\omega}$.
+with NED position $\mathbf{p}^e$, NED velocity $\mathbf{v}^e$, the attitude quaternion $\mathbf{q}_{eb}$ and the vector of rotation rate about body axes $\mathbf{\omega}^b$.
 \subsubsection{Exogenous perturbations}
 %
 The aircraft dynamics are subject to exogenous disturbances due to atmospheric free air turbulence. These are taken into account as additional system inputs, extending the input vector to
@@ -399,7 +398,8 @@ To cope with steady state tracking errors, integral action is added by augmentin
 \mbf{u}
 \label{eq:integerrorss}
 \end{align}
-where $G$ is a sparse matrix defining the states that are selected for integral action. As is common practice, wind disturbances and actuator and engine dynamics are neglected for the LQR design systems. A linear model including models of actuators and engine is used for fast evaluation of candidate controllers during controller tuning.
+where $G$ is a sparse matrix defining the states that are selected for integral action. As is common practice, wind disturbances and actuator and engine dynamics are neglected for the LQR design systems. 
+%A linear model including models of actuators and engine is used for fast evaluation of candidate controllers during controller tuning.
 \subsection{Coordinate frames}
 The system to be controlled is a formation of $n$ UAS flying in an arbitrary pattern. In the literature, a variety of guidance frames has been proposed, ranging from a planar frame aligned with the follower's velocity (\cite{gu2006design}) to the predecessor's body frame (\cite{schumacher2000adaptive}).
 The primary objective of tight formation flight is to keep each UAS at the position of maximum efficiency in the wake of its predecessor.
